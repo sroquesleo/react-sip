@@ -36,6 +36,7 @@ import {
 export default class SipProvider extends React.Component<
   {
     host: string;
+    mode: string;
     port: number;
     pathname: string;
     user: string;
@@ -71,6 +72,7 @@ export default class SipProvider extends React.Component<
 
   public static propTypes = {
     host: PropTypes.string,
+    mode: PropTypes.string,
     port: PropTypes.number,
     pathname: PropTypes.string,
     user: PropTypes.string,
@@ -88,6 +90,7 @@ export default class SipProvider extends React.Component<
 
   public static defaultProps = {
     host: null,
+    mode: null,
     port: null,
     pathname: "",
     user: null,
@@ -170,6 +173,7 @@ export default class SipProvider extends React.Component<
     }
     if (
       this.props.host !== prevProps.host ||
+      this.props.mode !== prevProps.mode ||
       this.props.port !== prevProps.port ||
       this.props.pathname !== prevProps.pathname ||
       this.props.user !== prevProps.user ||
@@ -309,9 +313,9 @@ export default class SipProvider extends React.Component<
       this.ua = null;
     }
 
-    const { host, port, pathname, user, password, autoRegister } = this.props;
+    const { host, mode, port, pathname, user, password, autoRegister } = this.props;
 
-    if (!host || !port || !user) {
+    if (!host || !mode || !port || !user) {
       this.setState({
         sipStatus: SIP_STATUS_DISCONNECTED,
         sipErrorType: null,
@@ -322,7 +326,7 @@ export default class SipProvider extends React.Component<
 
     try {
       const socket = new JsSIP.WebSocketInterface(
-        `wss://${host}:${port}${pathname}`,
+        `${mode}://${host}:${port}${pathname}`,
       );
       this.ua = new JsSIP.UA({
         uri: `sip:${user}@${host}`,
