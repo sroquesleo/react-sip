@@ -24,6 +24,7 @@ export interface Sip {
   errorMessage?: string;
 
   host?: string;
+  mode?: string;
   port?: number;
   user?: string;
   password?: string;
